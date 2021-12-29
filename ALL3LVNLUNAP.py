@@ -12,7 +12,7 @@ import json
 
 
 
-poly_fees_flipside_df = pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/6c5fbcd3-9156-4e07-954a-5656cb632748/data/latest')
+df = pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/6c5fbcd3-9156-4e07-954a-5656cb632748/data/latest')
 
 t_f = False
 st.sidebar.write("Choose y-axis scale")
@@ -27,7 +27,7 @@ if check:
 # ### Polygon Fees and Transactions - Base Table
 # """)
 
-st.dataframe(poly_fees_flipside_df)
+st.dataframe(df)
 
 # st.markdown("""
 # """)
@@ -36,8 +36,8 @@ st.dataframe(poly_fees_flipside_df)
 st.sidebar.header("Choose Columns:")
 columns = st.sidebar.multiselect(
     "Select the columns to plot",
-    options = poly_fees_flipside_df.columns,
-    default = poly_fees_flipside_df.columns.max()
+    options = df.columns,
+    default = df.columns.max()
 )
 
 # st.sidebar.header("Choose colors:")
@@ -47,9 +47,11 @@ columns = st.sidebar.multiselect(
 #     default = poly_fees_flipside_df.NFT
 # )
 
+# chart_type = st.text_input('bar, scatter, line','scatter')
 
-polygon_fees_graph = px.scatter(
-    poly_fees_flipside_df, #this is the dataframe you are trying to plot
+
+bar = px.bar(
+    df, #this is the dataframe you are trying to plot
     x = "DAY",
     y = columns,
     color = "RARITY_AND_NFT",
@@ -60,6 +62,34 @@ polygon_fees_graph = px.scatter(
     height = 600,
     log_y = t_f
 )
+st.plotly_chart(bar)
 
+scatter = px.scatter(
+    df, #this is the dataframe you are trying to plot
+    x = "DAY",
+    y = columns,
+    color = "RARITY_AND_NFT",
+    # title = "<b>DIY / Choose your own adventure - Polygon Fees</b>",
+    orientation = "v",
+    template = "plotly_white",
+    width = 1000,
+    height = 600,
+    log_y = t_f
+)
+st.plotly_chart(scatter)
 
-st.plotly_chart(polygon_fees_graph)
+line = px.line(
+    df, #this is the dataframe you are trying to plot
+    x = "DAY",
+    y = columns,
+    
+    color = "RARITY_AND_NFT",
+    # title = "<b>DIY / Choose your own adventure - Polygon Fees</b>",
+    orientation = "v",
+    template = "plotly_white",
+    width = 1000,
+    height = 600,
+    log_y = t_f
+)
+
+st.plotly_chart(line)
